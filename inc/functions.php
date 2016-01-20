@@ -904,3 +904,24 @@ function getDbList($format = 'default')
         return $tinymce_list;
     }
 }
+
+/**
+ * Generate a two-character language code from language stored in current session.
+ *
+ * @return string
+ */
+function getLanguage() {
+    if (isset($_SESSION['prefs']['lang'])) {
+        $split_lc = explode('_', $_SESSION['prefs']['lang']);
+        // Something like "de_DE" or "en_GB" should yield an array of size 2.
+        // If not, fall back to English.
+        if (count($split_lc) != 2) {
+            return "en";
+        } else {
+            return $split_lc[0];
+        }
+    } else {
+        // Fall back to English if no language is set.
+        return "en";
+    }
+}
