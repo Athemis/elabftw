@@ -397,8 +397,9 @@ $(document).ready(function() {
     }
 
     CKEDITOR.replace('body_area', {
-        extraPlugins: 'image2,tableresize,stylesheetparser,mathjax,colordialog,justify',
+        extraPlugins: 'image2,tableresize,mathjax,colordialog,justify,tabletools,quicktable,find',
         removePlugins: 'image,forms',
+        removeButtons: '',
         skin: 'bootstrapck,/js/bootstrapck4-skin/skins/bootstrapck/',
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML&locale=<?php echo getLanguage(); ?>'
     }).on('instanceReady', function(event) {
