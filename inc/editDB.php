@@ -215,14 +215,18 @@ $(document).ready(function() {
     CKEDITOR.replace('body_area', {
         extraPlugins: 'image2,tableresize,stylesheetparser,mathjax,colordialog',
         removePlugins: 'image,forms',
+        contentsCss : ['js/bootstrap/dist/css/bootstrap.min.css', 'css/main.min.css'],
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML&locale=<?php echo getLanguage(); ?>'
     }).on('instanceReady', function(event) {
+        // Autocompletion of experiments and database entries
         // Make sure the textarea's `contentEditable` property is set to `true`
         this.document.getBody().$.contentEditable = true;
         $(this.document.getBody().$)
             .atwho('setIframe', this.window.getFrame().$)
             .atwho(at_config)
-        // If a Webkit-based browser is used, make sure links are not clickable
+        // If a Webkit-based browser is used, make sure links are not clickable.
+        // Otherwise, the linked side will be loaded on click within the iframe
+        // resulting in data loss.
         if (!CKEDITOR.env.webkit) return;
         function disableLinks() {
             var content = $(event.editor.document.$.defaultView.frameElement).contents();
