@@ -397,11 +397,12 @@ $(document).ready(function() {
     }
 
     CKEDITOR.replace('body_area', {
-        extraPlugins: 'image2,tableresize,stylesheetparser,mathjax,colordialog',
+        extraPlugins: 'image2,tableresize,stylesheetparser,mathjax,colordialog,justify',
         removePlugins: 'image,forms',
         skin: 'bootstrapck,/js/bootstrapck4-skin/skins/bootstrapck/',
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML&locale=<?php echo getLanguage(); ?>'
     }).on('instanceReady', function(event) {
+        // Activate autocompletion via At.js
         // Make sure the textarea's `contentEditable` property is set to `true`
         this.document.getBody().$.contentEditable = true;
         $(this.document.getBody().$)
