@@ -406,7 +406,8 @@ $(document).ready(function() {
         $(this.document.getBody().$)
             .atwho('setIframe', this.window.getFrame().$)
             .atwho(at_config)
-
+        // If a Webkit-based browser is used, make sure links are not clickable
+        if (!CKEDITOR.env.webkit) return;
         function disableLinks() {
             var content = $(event.editor.document.$.defaultView.frameElement).contents();
             content.find('body.cke_editable').on('click', 'a', function() {

@@ -217,12 +217,13 @@ $(document).ready(function() {
         removePlugins: 'image,forms',
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML'
     }).on('instanceReady', function(event) {
-      // Make sure the textarea's `contentEditable` property is set to `true`
+        // Make sure the textarea's `contentEditable` property is set to `true`
         this.document.getBody().$.contentEditable = true;
         $(this.document.getBody().$)
             .atwho('setIframe', this.window.getFrame().$)
             .atwho(at_config)
-
+        // If a Webkit-based browser is used, make sure links are not clickable
+        if (!CKEDITOR.env.webkit) return;
         function disableLinks() {
             var content = $(event.editor.document.$.defaultView.frameElement).contents();
             content.find('body.cke_editable').on('click', 'a', function() {
