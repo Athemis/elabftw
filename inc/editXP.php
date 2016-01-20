@@ -43,7 +43,7 @@ if ($experiment['locked'] == 1) {
 // BEGIN CONTENT
 ?>
 <link rel="stylesheet" media="all" href="css/autocomplete.css" />
-<script src="js/tinymce/tinymce.min.js"></script>
+<script src="js/ckeditor/ckeditor.js"></script>
 <menu class='border'><a href='experiments.php?mode=show'><img src='img/arrow-left-blue.png' class='bot5px' alt='' /> <?php echo _('Back to experiments listing'); ?></a></menu>
 
 <section class='box' id='main_section' style='border-left: 6px solid #<?php echo $experiment['color']; ?>'>
@@ -143,8 +143,9 @@ if ($experiment['locked'] == 1) {
     <h4><?php echo _('Title'); ?></h4>
     <input id='title_input' name='title' rows="1" value="<?php echo stripslashes($experiment['title']); ?>" required />
     <h4><?php echo ngettext('Experiment', 'Experiments', 1); ?></h4>
-    <textarea id='body_area' class='mceditable' name='body' rows="15" cols="80">
-        <?php echo stripslashes($experiment['body']); ?>
+    <textarea contenteditable='true' id='body_area' class='mceditable' name='body' rows="15" cols="80">
+        <!-- <?php echo stripslashes($experiment['body']); ?> -->
+        <?php echo $experiment['body']; ?>
     </textarea>
 
     <!-- SUBMIT BUTTON -->
@@ -386,57 +387,9 @@ $(document).ready(function() {
         }
     });
     // EDITOR
-    tinymce.init({
-        mode : "specific_textareas",
-        editor_selector : "mceditable",
-        content_css : "css/tinymce.css",
-        plugins : "table textcolor searchreplace code fullscreen insertdatetime paste charmap save image link pagebreak mention",
-        pagebreak_separator: "<pagebreak>",
-        toolbar1: "undo redo | bold italic underline | fontsizeselect | alignleft aligncenter alignright alignjustify | superscript subscript | bullist numlist outdent indent | forecolor backcolor | charmap | image link | save",
-        removed_menuitems : "newdocument",
-        // save button :
-        save_onsavecallback: function() {
-            $.ajax({
-                type: "POST",
-                url: "app/quicksave.php",
-                data: {
-                id : <?php echo $id; ?>,
-                type : 'experiments',
-                // we need this to get the updated content
-                title : document.getElementById('title_input').value,
-                date : document.getElementById('datepicker').value,
-                body : tinymce.activeEditor.getContent()
-                }
-            }).done(showSaved());
-        },
-        // keyboard shortcut to insert today's date at cursor in editor
-        setup : function(editor) {
-            editor.addShortcut("ctrl+shift+d", "add date at cursor", function() { addDateOnCursor(); });
-        },
-        mentions: {
-            source: [<?php echo getDbList('mention'); ?>],
-            delimiter: '#'
-        },
-        language : '<?php echo $_SESSION['prefs']['lang']; ?>',
-        style_formats_merge: true,
-        style_formats: [
-            {
-                title: 'Image Left',
-                selector: 'img',
-                styles: {
-                    'float': 'left',
-                    'margin': '0 10px 0 10px'
-                }
-             },
-             {
-                 title: 'Image Right',
-                 selector: 'img',
-                 styles: {
-                     'float': 'right',
-                     'margin': '0 0 10px 10px'
-                 }
-             }
-        ]
+    CKEDITOR.replace('body_area', {
+        extraPlugins: 'mathjax',
+        mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML'
     });
 
     // ADD TAG JS
