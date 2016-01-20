@@ -218,10 +218,23 @@ $(document).ready(function() {
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML'
     }).on('instanceReady', function(event) {
       // Make sure the textarea's `contentEditable` property is set to `true`
-      this.document.getBody().$.contentEditable = true;
-      $(this.document.getBody().$)
-        .atwho('setIframe', this.window.getFrame().$)
-        .atwho(at_config)
+        this.document.getBody().$.contentEditable = true;
+        $(this.document.getBody().$)
+            .atwho('setIframe', this.window.getFrame().$)
+            .atwho(at_config)
+
+        function disableLinks() {
+            var content = $(event.editor.document.$.defaultView.frameElement).contents();
+            content.find('body.cke_editable').on('click', 'a', function() {
+                return false;
+            });
+            content.find('head').append('<style>a{cursor:text}</style>');
+        }
+        event.editor.on('mode', function() {
+            if (this.mode === 'wysiwyg')
+                disableLinks();
+        });
+        disableLinks();
     });
     // DATEPICKER
     $( "#datepicker" ).datepicker({dateFormat: 'yymmdd'});
