@@ -48,7 +48,7 @@ $ftw = $ftw_arr[0];
 ?>
 
 <!DOCTYPE HTML>
-<html>
+<html lang="<?php echo getLanguage(); ?>">
 <head>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -71,7 +71,7 @@ echo "<title>" . (isset($page_title) ? $page_title : "Lab manager") . " - eLab "
 <!-- bootstrap JS -->
 <script src="js/bootstrap/js/alert.js"></script>
 <!-- MathJax -->
-<script src="js/MathJax/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script src="js/MathJax/MathJax.js?config=TeX-AMS_CHTML&locale=<?php echo getLanguage(); ?>"></script>
 </head>
 
 <body>
