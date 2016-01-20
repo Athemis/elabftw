@@ -398,7 +398,7 @@ $(document).ready(function() {
 
     CKEDITOR.replace('body_area', {
         extraPlugins: 'image2,tableresize,mathjax,colordialog,justify,tabletools,quicktable,find',
-        removePlugins: 'image,forms',
+        removePlugins: 'image,forms,scayt,wsc',
         removeButtons: '',
         skin: 'bootstrapck,/js/bootstrapck4-skin/skins/bootstrapck/',
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML&locale=<?php echo getLanguage(); ?>'
