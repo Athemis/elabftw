@@ -66,16 +66,12 @@ echo "<title>" . (isset($page_title) ? $page_title : "Lab manager") . " - eLab "
 <!-- JAVASCRIPT -->
 <script src="js/jquery/dist/jquery.min.js"></script>
 <script src="js/jquery-ui/jquery-ui.min.js"></script>
-<script src="js/Caret.js/dist/jquery.caret.min.js"></script>
 <!-- see Gruntfile.js to see what gets inside this -->
 <script src="js/elabftw.min.js"></script>
 <!-- bootstrap JS -->
 <script src="js/bootstrap/js/alert.js"></script>
 <!-- MathJax -->
 <script src="js/MathJax/MathJax.js?config=TeX-AMS_CHTML"></script>
-<!-- At.js -->
-<link href="js/At.js/dist/css/jquery.atwho.min.css" rel="stylesheet">
-<script src="js/At.js/dist/js/jquery.atwho.min.js"></script>
 </head>
 
 <body>

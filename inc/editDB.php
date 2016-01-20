@@ -40,6 +40,10 @@ if ($data['locked'] == 1) {
 
 // BEGIN CONTENT
 ?>
+<link rel="stylesheet" media="all"  href="js/At.js/dist/css/jquery.atwho.min.css" />
+<script src="js/ckeditor/ckeditor.js"></script>
+<script src="js/Caret.js/dist/jquery.caret.min.js"></script>
+<script src="js/At.js/dist/js/jquery.atwho.min.js"></script>
 <script src="js/ckeditor/ckeditor.js"></script>
 <section class='box' style='border-left: 6px solid #<?php echo $data['bgcolor']; ?>'>
     <!-- TRASH -->

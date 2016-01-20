@@ -42,8 +42,10 @@ if ($experiment['locked'] == 1) {
 
 // BEGIN CONTENT
 ?>
-<link rel="stylesheet" media="all" href="css/autocomplete.css" />
+<link rel="stylesheet" media="all"  href="js/At.js/dist/css/jquery.atwho.min.css" />
 <script src="js/ckeditor/ckeditor.js"></script>
+<script src="js/Caret.js/dist/jquery.caret.min.js"></script>
+<script src="js/At.js/dist/js/jquery.atwho.min.js"></script>
 <menu class='border'><a href='experiments.php?mode=show'><img src='img/arrow-left-blue.png' class='bot5px' alt='' /> <?php echo _('Back to experiments listing'); ?></a></menu>
 
 <section class='box' id='main_section' style='border-left: 6px solid #<?php echo $experiment['color']; ?>'>
