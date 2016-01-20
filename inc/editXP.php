@@ -387,10 +387,23 @@ $(document).ready(function() {
         }
     });
     // EDITOR
+    var at_config = {
+      at: "#",
+      data: [<?php echo getDbList('mention'); ?>],
+      insertTpl: "<a href='${url}'>${name}</a>",
+      displayTpl: "<li data-value='@${name}'>${name}</li>"
+    }
+
     CKEDITOR.replace('body_area', {
         extraPlugins: 'image2,tableresize,stylesheetparser,mathjax,colordialog',
         removePlugins: 'image,forms',
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML'
+    }).on('instanceReady', function(event) {
+      // Make sure the textarea's `contentEditable` property is set to `true`
+      this.document.getBody().$.contentEditable = true;
+      $(this.document.getBody().$)
+        .atwho('setIframe', this.window.getFrame().$)
+        .atwho(at_config)
     });
 
     // ADD TAG JS

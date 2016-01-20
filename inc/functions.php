@@ -858,7 +858,7 @@ function getDbList($format = 'default')
     global $pdo;
 
     $link_list = "";
-    $tinymce_list = "";
+    $ckeditor_list = "";
     $sql = "SELECT items_types.name,
     items.id AS itemid,
     items.* FROM items
@@ -879,7 +879,7 @@ function getDbList($format = 'default')
 
             // now build the list in both formats
             $link_list .= "'" . $link['itemid'] . " - " . $link_type . " - " . $link_name . "',";
-            $tinymce_list .= "{ name : \"<a href='database.php?mode=view&id=" . $link['itemid'] . "'>" . $link_name . "</a>\"},";
+            $ckeditor_list .= "{ name: \"" . $link_name . "\", url : \"database.php?mode=view&id=" . $link['itemid'] . "\"},";
         }
     }
 
@@ -897,10 +897,10 @@ function getDbList($format = 'default')
                 $link_name = str_replace(array("'", "\""), "", html_entity_decode(substr($link['title'], 0, 60), ENT_QUOTES));
                 // remove also the % (see issue #62)
                 $link_name = str_replace("%", "", $link_name);
-                $tinymce_list .= "{ name : \"<a href='experiments.php?mode=view&id=" . $link['id'] . "'>" . $link_name . "</a>\"},";
+                $ckeditor_list .= "{ name: \"" . $link_name . "\", url : \"database.php?mode=view&id=" . $link['id'] . "\"},";
             }
         }
 
-        return $tinymce_list;
+        return $ckeditor_list;
     }
 }
