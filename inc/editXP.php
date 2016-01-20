@@ -388,7 +388,8 @@ $(document).ready(function() {
     });
     // EDITOR
     CKEDITOR.replace('body_area', {
-        extraPlugins: 'mathjax',
+        extraPlugins: 'image2,tableresize,stylesheetparser,mathjax,colordialog',
+        removePlugins: 'image,forms',
         mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML'
     });
 
