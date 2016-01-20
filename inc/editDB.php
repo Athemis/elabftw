@@ -215,7 +215,7 @@ $(document).ready(function() {
     CKEDITOR.replace('body_area', {
         extraPlugins: 'image2,tableresize,stylesheetparser,mathjax,colordialog',
         removePlugins: 'image,forms',
-        mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML'
+        mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML&locale=<?php echo getLanguage(); ?>'
     }).on('instanceReady', function(event) {
         // Make sure the textarea's `contentEditable` property is set to `true`
         this.document.getBody().$.contentEditable = true;
