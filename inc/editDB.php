@@ -76,7 +76,7 @@ if ($data['locked'] == 1) {
     <input id='title_input' name='title' rows="1" value='<?php echo stripslashes($data['title']); ?>' required />
     <h4><?php echo _('Infos'); ?></h4>
     <textarea class='mceditable' name='body' rows="15" cols="80">
-        <?php echo stripslashes($data['body']); ?>
+        <?php echo $data['body']; ?>
     </textarea>
     <!-- SUBMIT BUTTON -->
     <div class='center' id='saveButton'>

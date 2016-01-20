@@ -144,7 +144,7 @@ if ($experiment['locked'] == 1) {
     <input id='title_input' name='title' rows="1" value="<?php echo stripslashes($experiment['title']); ?>" required />
     <h4><?php echo ngettext('Experiment', 'Experiments', 1); ?></h4>
     <textarea id='body_area' class='mceditable' name='body' rows="15" cols="80">
-        <?php echo stripslashes($experiment['body']); ?>
+        <?php echo $experiment['body']; ?>
     </textarea>
 
     <!-- SUBMIT BUTTON -->
