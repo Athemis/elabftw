@@ -397,7 +397,7 @@ $(document).ready(function() {
     }
 
     CKEDITOR.replace('body_area', {
-        extraPlugins: 'image2,tableresize,mathjax,colordialog,justify,tabletools,quicktable,find',
+        extraPlugins: 'image2,tableresize,mathjax,colordialog,justify,tabletools,quicktable,find,colorbutton',
         removePlugins: 'image,forms,scayt,wsc',
         removeButtons: '',
         skin: 'bootstrapck,/js/bootstrapck4-skin/skins/bootstrapck/',
