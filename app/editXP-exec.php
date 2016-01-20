@@ -51,29 +51,28 @@ if ($errflag) {
 }
 
 // SQL for editXP
-    $sql = "UPDATE experiments 
-        SET title = :title, 
-        date = :date, 
+    $sql = "UPDATE experiments
+        SET title = :title,
+        date = :date,
         body = :body
-        WHERE userid = :userid 
+        WHERE userid = :userid
         AND id = :id";
 $req = $pdo->prepare($sql);
-$result = $req->execute(array(
-    'title' => $title,
-    'date' => $date,
-    'body' => $body,
-    'userid' => $_SESSION['userid'],
-    'id' => $id
-));
+// use PDO::bindParam to mitigate SQL injections
+$req->bindParam(':title', $title, PDO::PARAM_STR);
+$req->bindParam(':date', $date, PDO::PARAM_STR);
+$req->bindParam(':body', $body, PDO::PARAM_STR);
+$req->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_INT);
+$req->bindParam(':id', $id, PDO::PARAM_INT);
+$result = $req->execute();
 
 // we add a revision to the revision table
 $sql = "INSERT INTO experiments_revisions (item_id, body, userid) VALUES(:item_id, :body, :userid)";
 $req = $pdo->prepare($sql);
-$result = $req->execute(array(
-    'item_id' => $id,
-    'body' => $body,
-    'userid' => $_SESSION['userid']
-));
+$req->bindParam(':item_id', $id, PDO::PARAM_INT);
+$req->bindParam(':body', $body, PDO::PARAM_STR);
+$req->bindParam(':userid', $_SESSION['userid'], PDO::PARAM_INT);
+$result = $req->execute();
 
 
 // Check if insertion is successful
