@@ -40,7 +40,7 @@ if ($data['locked'] == 1) {
 
 // BEGIN CONTENT
 ?>
-<script src='js/tinymce/tinymce.min.js'></script>
+<script src="js/ckeditor/ckeditor.js"></script>
 <section class='box' style='border-left: 6px solid #<?php echo $data['bgcolor']; ?>'>
     <!-- TRASH -->
     <img class='align_right' src='img/big-trash.png' title='delete' alt='delete' onClick="deleteThis('<?php echo $id; ?>','item', 'database.php')" />
@@ -75,8 +75,8 @@ if ($data['locked'] == 1) {
     <h4><?php echo _('Title'); ?></h4>
     <input id='title_input' name='title' rows="1" value='<?php echo stripslashes($data['title']); ?>' required />
     <h4><?php echo _('Infos'); ?></h4>
-    <textarea class='mceditable' name='body' rows="15" cols="80">
-        <?php echo stripslashes($data['body']); ?>
+    <textarea class='mceditable' id='body_area' name='body' rows="15" cols="80">
+        <?php echo $data['body']; ?>
     </textarea>
     <!-- SUBMIT BUTTON -->
     <div class='center' id='saveButton'>
@@ -201,59 +201,10 @@ $(document).ready(function() {
     });
 
     // EDITOR
-    tinymce.init({
-        mode : "specific_textareas",
-        editor_selector : "mceditable",
-        content_css : "css/tinymce.css",
-        plugins : "table textcolor searchreplace code fullscreen insertdatetime paste charmap save image link pagebreak mention",
-        pagebreak_separator: "<pagebreak>",
-        toolbar1: "undo redo | bold italic underline | fontsizeselect | alignleft aligncenter alignright alignjustify | superscript subscript | bullist numlist outdent indent | forecolor backcolor | charmap | image link | save",
-        removed_menuitems : "newdocument",
-        // save button :
-        save_onsavecallback: function() {
-            $.ajax({
-                type: "POST",
-                url: "app/quicksave.php",
-                data: {
-                id : <?php echo $id; ?>,
-                type : 'items',
-                // we need this to get the updated content
-                title : document.getElementById('title_input').value,
-                date : document.getElementById('datepicker').value,
-                body : tinymce.activeEditor.getContent()
-                }
-            }).done(showSaved());
-        },
-        // keyboard shortcut to insert today's date at cursor in editor
-        setup : function(editor) {
-            editor.addShortcut("ctrl+shift+d", "add date at cursor", function() { addDateOnCursor(); });
-        },
-        language : '<?php echo $_SESSION['prefs']['lang']; ?>',
-        mentions: {
-            source: [<?php echo getDbList('mention'); ?>],
-            delimiter: '#'
-        },
-        style_formats_merge: true,
-        style_formats: [
-            {
-                title: 'Image Left',
-                selector: 'img',
-                styles: {
-                    'float': 'left',
-                    'margin': '0 10px 0 10px'
-                }
-             },
-             {
-                 title: 'Image Right',
-                 selector: 'img',
-                 styles: {
-                     'float': 'right',
-                     'margin': '0 0 10px 10px'
-                 }
-             }
-        ]
-
-    });
+    CKEDITOR.replace('body_area', {
+        extraPlugins: 'mathjax',
+        mathJaxLib: 'js/MathJax/MathJax.js?config=TeX-AMS_CHTML'
+    });;
     // DATEPICKER
     $( "#datepicker" ).datepicker({dateFormat: 'yymmdd'});
     // STARS
