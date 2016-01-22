@@ -207,8 +207,32 @@ if ($req->rowcount() > 0) {
 // DISPLAY eLabID
 echo "<p class='elabid'>" . _('Unique eLabID:') . " " . $data['elabid'];
 echo "</section>";
+
 // DISPLAY FILES
 require_once 'inc/display_file.php';
+
+// SEQUENCE ALIGNMENT BOX
+?>
+<script src='//cdn.biojs.net/msa/0.4/msa.min.gz.js'></script>
+
+<div id='msa_box' class='box'>
+    <h3><?php echo _('Sequence View'); ?></h3>
+    <div id='msa_view'>
+    </div>
+</div>
+
+<script>
+    var msa = require('msa');
+    var opts = {
+        el: document.getElementById('msa_view'),
+        importURL: '<?php echo $seqFile; ?>',
+        bootstrapMenu: false, // would be nice to use, but is broken at the moment
+    };
+    var m = new msa(opts);
+    m.render();
+</script>
+
+<?php
 
 // COMMENT BOX
 ?>
@@ -226,6 +250,7 @@ $req = $pdo->prepare($sql);
 $req->execute(array(
     'id' => $id
 ));
+
 if ($req->rowCount() > 0) {
     // there is comments to display
     while ($comments = $req->fetch()) {

@@ -48,6 +48,9 @@ if ($count > 0) {
         // list of extensions with a corresponding img/thumb-*.png image
         $common_extensions = array('avi', 'csv', 'doc', 'docx', 'mov', 'pdf', 'ppt', 'rar', 'xls', 'xlsx', 'zip');
 
+        // list of extensions viewable with BioJS MSA Viewer
+        $sequence_extensions = array('fa', 'fasta', 'clustal', 'gff');
+
         // Make thumbnail only if it isn't done already
         if (!file_exists($thumbpath)) {
             make_thumb($filepath, $ext, $thumbpath, 100);
@@ -73,6 +76,13 @@ if ($count > 0) {
             echo "<div class='center'><script>
                   showMol('" . $mol . "');
                   </script></div>";
+
+        } elseif (in_array($ext, $sequence_extensions)) {
+            echo "<a class='align_right' href='#' onClick=\"\">";
+            echo "<span title='open in msa viewer' class='glyphicon glyphicon-eye-open' /></span></a>";
+            // show a dummy image
+            echo "<img class='thumb' src='img/thumb.png' alt='' />";
+            $seqFile = "/" . $filepath;
 
         } else { // uncommon extension without a nice image to display
             echo "<img class='thumb' src='img/thumb.png' alt='' />";
