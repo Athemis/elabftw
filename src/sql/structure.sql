@@ -1060,6 +1060,15 @@ CREATE TABLE `users2teams` (
   `teams_id` int(10) UNSIGNED NOT NULL
 );
 --
+-- Table structure for table `experiments_signatures`
+--
+CREATE TABLE `experiments_signatures` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `datetime` datetime NOT NULL,
+  `item_id` int(10) UNSIGNED NOT NULL,
+  `userid` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
 -- Indexes for table `users2teams`
 --
 ALTER TABLE `users2teams`
@@ -1069,7 +1078,25 @@ ALTER TABLE `users2teams`
   ADD CONSTRAINT `fk_users2teams_teams_id` FOREIGN KEY (`teams_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_users2teams_users_id` FOREIGN KEY (`users_id`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
-
+--
+-- Indexes for table `experiments_signatures`
+--
+ALTER TABLE `experiments_signatures`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_experiments_signatures_experiments_id` (`item_id`),
+  ADD KEY `fk_experiments_signatures_users_userid` (`userid`);
+--
+-- AUTO_INCREMENT for table `experiments_signatures`
+--
+ALTER TABLE `experiments_signatures`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for table `experiments_signatures`
+--
+ALTER TABLE `experiments_signatures`
+  ADD CONSTRAINT `fk_experiments_signatures_experiments_id` FOREIGN KEY (`item_id`) REFERENCES `experiments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_experiments_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 --
 -- Constraints for table `users2team_groups`
