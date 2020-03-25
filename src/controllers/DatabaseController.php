@@ -62,11 +62,15 @@ class DatabaseController extends AbstractEntityController
         // COMMENTS
         $commentsArr = $this->Entity->Comments->readAll();
 
+        // SIGNATURES
+        $signaturesArr = $this->Entity->Signatures->readAll();
+
         $template = 'view.html';
         // the mode parameter is for the uploads tpl
         $renderArr = array(
             'Entity' => $this->Entity,
             'commentsArr' => $commentsArr,
+            'signaturesArr' => $signaturesArr,
             'mode' => 'view',
             'revNum' => $revNum,
             'linksArr' => $linksArr,

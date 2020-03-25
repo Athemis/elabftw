@@ -62,6 +62,9 @@ class ExperimentsController extends AbstractEntityController
         // COMMENTS
         $commentsArr = $this->Entity->Comments->readAll();
 
+        // SIGNATURES
+        $signaturesArr = $this->Entity->Signatures->readAll();
+
         // REVISIONS
         $Revisions = new Revisions($this->Entity);
         $revNum = $Revisions->readCount();
@@ -76,6 +79,7 @@ class ExperimentsController extends AbstractEntityController
             'stepsArr' => $stepsArr,
             'timestampInfo' => $timestampInfo,
             'commentsArr' => $commentsArr,
+            'signaturesArr' => $signaturesArr,
             'mode' => 'view',
         );
 

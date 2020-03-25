@@ -1,36 +1,30 @@
-{% extends 'base.html' %}
-
-{% block body %}
+{% extends 'base.html' %} {% block body %}
 
 <!-- Modal for timestamping -->
 <div class='modal fade' id='timestampModal' tabindex='-1' role='dialog' aria-labelledby='timestampModalLabel' aria-hidden='true'>
-  <div class='modal-dialog' role='document'>
-    <div class='modal-content'>
-      <div class='modal-header'>
-        <h5 class='modal-title' id='timestampModalLabel'>{{ 'Timestamp Experiment'|trans }}</h5>
-        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='timestampModalLabel'>{{ 'Timestamp Experiment'|trans }}</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
           <span aria-hidden='true'>&times;</span>
         </button>
-      </div>
-      <div class='modal-body' data-wait='{{ 'Please wait…' }}'>
-        <p><i class='fas fa-exclamation-triangle'></i>
-          {{ 'Once timestamped an experiment cannot be edited anymore! Are you sure you want to do this?'|trans }}
-        </p>
-      </div>
-      <div class='timestamp-error'></div>
-      <div class='modal-footer'>
-        <button type='button' class='btn btn-secondary' data-dismiss='modal'>{{ 'Cancel'|trans }}</button>
-        <button type='button' id='goForTimestamp' class='btn btn-primary'>{{ 'Timestamp'|trans }}</button>
-      </div>
+            </div>
+            <div class='modal-body' data-wait='{{ ' Please wait… ' }}'>
+                <p><i class='fas fa-exclamation-triangle'></i> {{ 'Once timestamped an experiment cannot be edited anymore! Are you sure you want to do this?'|trans }}
+                </p>
+            </div>
+            <div class='timestamp-error'></div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>{{ 'Cancel'|trans }}</button>
+                <button type='button' id='goForTimestamp' class='btn btn-primary'>{{ 'Timestamp'|trans }}</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-{% include('view-edit.html') %}
-
-{% if Entity.entityData.timestamped %}
-<div class='alert alert-success'><i class='fas fa-info-circle'></i>
-    {{ 'Experiment was timestamped by %s on %s at %s'|trans|format(timestampInfo.timestamper.fullname, Entity.entityData.timestampedwhen|date('Y-m-d'), Entity.entityData.timestampedwhen|date('H:i:s'))|raw }}
+{% include('view-edit.html') %} {% if Entity.entityData.timestamped %}
+<div class='alert alert-success'><i class='fas fa-info-circle'></i> {{ 'Experiment was timestamped by %s on %s at %s'|trans|format(timestampInfo.timestamper.fullname, Entity.entityData.timestampedwhen|date('Y-m-d'), Entity.entityData.timestampedwhen|date('H:i:s'))|raw }}
     <a class='elab-tooltip' href='app/download.php?f={{ timestampInfo.pdf.0.long_name }}'>
         <span>{{ 'Download timestamped pdf'|trans }}</span><i class='fas fa-file-pdf'></i>
     </a>
@@ -46,99 +40,80 @@
 {% endif %}
 
 <section class='item' style='padding:15px;border-left: 6px solid #{{ Entity.entityData.color }}'>
-  <p class='align_right inline'>
-    {% if Entity.type == 'experiments' %}
-      <i class='fas fa-clipboard-check' title='{{ 'Status'|trans }}'></i>
-      {{ Entity.entityData.category }}
-    {% else %}
-      {% if Entity.entityData.rating > 0 %}
-        {{ Entity.entityData.rating|stars|raw }}
-      {% endif %}
-    {% endif %}
-    <i class='fas fa-eye' title='{{ 'Visibility'|trans }}'></i> {{ Entity.getCan('read') }}
-    <i class='fas fa-pencil-alt' title='{{ 'Edit'|trans }}'></i> {{ Entity.getCan('write') }}
-  </p>
+    <p class='align_right inline'>
+        {% if Entity.type == 'experiments' %}
+        <i class='fas fa-clipboard-check' title='{{ ' Status '|trans }}'></i> {{ Entity.entityData.category }} {% else %} {% if Entity.entityData.rating > 0 %} {{ Entity.entityData.rating|stars|raw }} {% endif %} {% endif %}
+        <i class='fas fa-eye' title='{{ ' Visibility '|trans }}'></i> {{ Entity.getCan('read') }}
+        <i class='fas fa-pencil-alt' title='{{ ' Edit '|trans }}'></i> {{ Entity.getCan('write') }}
+    </p>
 
-  <!-- DATE -->
-  <div>
-    <i class='far fa-calendar-alt mr-1'></i>{{ Entity.entityData.date|kdate }}
-  </div>
-  <!-- begin action buttons row -->
-  <span class='view-action-buttons'>
+    <!-- DATE -->
+    <div>
+        <i class='far fa-calendar-alt mr-1'></i>{{ Entity.entityData.date|kdate }}
+    </div>
+    <!-- begin action buttons row -->
+    <span class='view-action-buttons'>
   {% if not Entity.isReadOnly and not Entity.entityData.locked %}
       <a class='elab-tooltip' href='?mode=edit&id={{ Entity.id }}'>
           <span>{{ 'Edit'|trans }}</span>
-          <i class='fas fa-pencil-alt' style='color:#29AEB9'></i>
-      </a>
-  {% endif %}
+    <i class='fas fa-pencil-alt' style='color:#29AEB9'></i>
+    </a>
+    {% endif %} {% if not App.Session.has('anon') %}
+    <a class='elab-tooltip' href='#'>
+        <span>{{ 'Duplicate'|trans }}</span>
+        <i class='far fa-copy clickable duplicateItem' data-id='{{ Entity.id }}'></i>
+    </a>
+    {% endif %}
 
-  {% if not App.Session.has('anon') %}
-  <a class='elab-tooltip' href='#'>
-      <span>{{ 'Duplicate'|trans }}</span>
-      <i class='far fa-copy clickable duplicateItem' data-id='{{ Entity.id }}'></i>
-  </a>
-  {% endif %}
+    <a class='elab-tooltip' href='make.php?what=pdf&id={{ Entity.id }}&type={{ Entity.type }}'>
+        <span>{{ 'Make a PDF'|trans }}</span>
+        <i class='fas fa-file-pdf'></i>
+    </a>
 
-  <a class='elab-tooltip' href='make.php?what=pdf&id={{ Entity.id }}&type={{ Entity.type }}'>
-      <span>{{ 'Make a PDF'|trans }}</span>
-      <i class='fas fa-file-pdf'></i>
-  </a>
+    <a class='elab-tooltip' href='make.php?what=zip&id={{ Entity.id }}&type={{ Entity.type }}'>
+        <span>{{ 'Make a ZIP'|trans }}</span>
+        <i class='fas fa-file-archive'></i>
+    </a>
 
-  <a class='elab-tooltip' href='make.php?what=zip&id={{ Entity.id }}&type={{ Entity.type }}'>
-      <span>{{ 'Make a ZIP'|trans }}</span>
-      <i class='fas fa-file-archive'></i>
-  </a>
+    {% if Entity.type == 'items' %}
+    <a class='elab-tooltip' href='experiments.php?mode=show&related={{ Entity.id }}'>
+        <span>{{ 'Show related'|trans }}</span>
+        <i class='fas fa-link'></i>
+    </a>
+    {% if Entity.entityData.bookable %}
+    <a class='elab-tooltip' href='team.php?item={{ Entity.id }}'>
+        <span>{{ 'Book item'|trans }}</span>
+        <i class='fas fa-calendar-plus'></i>
+    </a>
+    {% endif %} {% endif %}
 
-  {% if Entity.type == 'items' %}
-      <a class='elab-tooltip' href='experiments.php?mode=show&related={{ Entity.id }}'>
-          <span>{{ 'Show related'|trans }}</span>
-          <i class='fas fa-link'></i>
-      </a>
-      {% if Entity.entityData.bookable %}
-      <a class='elab-tooltip' href='team.php?item={{ Entity.id }}'>
-          <span>{{ 'Book item'|trans }}</span>
-          <i class='fas fa-calendar-plus'></i>
-      </a>
-      {% endif %}
-  {% endif %}
-
-  <!-- LOCK -->
-  {% if not Entity.isReadOnly %}
-      {% set lockIcon = 'fa-lock-open' %}
-      {% set alt = 'Lock/Unlock item'|trans %}
-      {% if Entity.entityData.locked %}
-          {% set lockIcon = 'fa-lock' %}
-          {% set alt = Entity.entityData.lockedwhen %}
-      {% endif %}
-      <a class='elab-tooltip' href='#'>
-          <span>{{ alt }}</span>
-          <i id='lock' class='fas {{lockIcon}}'></i>
-      </a>
-  {% endif %}
-
-  {% if Entity.type == 'experiments' %}
-    {% if not App.Session.has('anon') %}
+    <!-- LOCK -->
+    {% if not Entity.isReadOnly %} {% set lockIcon = 'fa-lock-open' %} {% set alt = 'Lock/Unlock item'|trans %} {% if Entity.entityData.locked %} {% set lockIcon = 'fa-lock' %} {% set alt = Entity.entityData.lockedwhen %} {% endif %}
+    <a class='elab-tooltip' href='#'>
+        <span>{{ alt }}</span>
+        <i id='lock' class='fas {{lockIcon}}'></i>
+    </a>
+    {% endif %} {% if Entity.type == 'experiments' %} {% if not App.Session.has('anon') %}
     <a class='elab-tooltip' href='#'>
         <span>{{ 'Share'|trans }}</span>
         <i class='fas fa-share-alt clickable shareItem' data-id='{{ Entity.id }}'></i>
     </a>
-    <input type='text' id='shareLinkInput' value='' style='display:none' />
-    {% endif %}
-  {% endif %}
+    <input type='text' id='shareLinkInput' value='' style='display:none' /> {% endif %} {% endif %}
 
-  <!-- show timestamp button if not timestamped already -->
-  {% if not Entity.entityData.timestamped and Entity.isTimestampable and Entity.type == 'experiments' and not App.Session.has('anon') %}
+    <!-- show timestamp button if not timestamped already -->
+    {% if not Entity.entityData.timestamped and Entity.isTimestampable and Entity.type == 'experiments' and not App.Session.has('anon') %}
     <a class='elab-tooltip' href='#'>
-      <span>{{ 'Timestamp Experiment'|trans }}</span>
-      <i class='far fa-calendar-check modalToggle' data-modal='timestampModal'></i>
+        <span>{{ 'Timestamp Experiment'|trans }}</span>
+        <i class='far fa-calendar-check modalToggle' data-modal='timestampModal'></i>
     </a>
-  {% endif %}
+    {% endif %}
 
-  </span><!-- end view-action-button -->
+    </span>
+    <!-- end view-action-button -->
 
-  <!-- build the tag array -->
-  {% if Entity.entityData.tags|length > 0 %}
-  <span class='tags'><i class='fas fa-tags'></i>
+    <!-- build the tag array -->
+    {% if Entity.entityData.tags|length > 0 %}
+    <span class='tags'><i class='fas fa-tags'></i>
       {% set tagsIdArr = Entity.entityData.tags_id|split(',') %}
       {% set tagsValueArr = Entity.entityData.tags|split('|') %}
       {% for key, tag in tagsValueArr %}
@@ -150,103 +125,92 @@
   <!-- TITLE : click on it to go to edit mode only if we are not in read only mode -->
   <div class='{{ not Entity.isReadOnly and not Entity.entityData.locked ? 'click2Edit clickable' }} title_view'>
       {% if Entity.type == 'items' %}
-          <span style='color:#{{ Entity.entityData.color }}'>{{ Entity.entityData.category }}</span>
-      {% endif %}
-      {{ Entity.entityData.title|raw }}
-  </div>
+          <span style='color:#{{ Entity.entityData.color }}'>{{ Entity.entityData.category }}</span> {% endif %} {{ Entity.entityData.title|raw }}
+    </div>
 
-  <!-- SHOW EVENTS -->
-  {% if Entity.entityData.events_id %}<i class='far fa-calendar-alt'></i>
-    {{ '%s%d%sSee bookings%s'|trans|format("<a href='team.php?item=", Entity.entityData.id, "'>", "</a>")|raw }}
-  {% endif %}
+    <!-- SHOW EVENTS -->
+    {% if Entity.entityData.events_id %}<i class='far fa-calendar-alt'></i> {{ '%s%d%sSee bookings%s'|trans|format("<a href='team.php?item=", Entity.entityData.id, "'>", "</a>")|raw }} {% endif %}
 
-  <!-- SHOW NEXT STEP -->
-  {% set next_step = Entity.entityData.next_step %}
-  {% if next_step|length > 0 %}
-      {% set nextStepsArr = next_step|split('|') %}
-      {% set next = nextStepsArr|first %}
-      <p>
-      {{ 'Next step'|trans }}: <span style='color:black'>{{ next|raw }}</span>
-      </p>
-  {% endif %}
+    <!-- SHOW NEXT STEP -->
+    {% set next_step = Entity.entityData.next_step %} {% if next_step|length > 0 %} {% set nextStepsArr = next_step|split('|') %} {% set next = nextStepsArr|first %}
+    <p>
+        {{ 'Next step'|trans }}: <span style='color:black'>{{ next|raw }}</span>
+    </p>
+    {% endif %}
 
-  <!--  BODY (show only if not empty) -->
-  {% set body = Entity.entityData.body %}
-  {% if body != '' %}
-      {% set body = Entity.entityData.body|md2html %}
-      <!-- Workaround for bug #532; long tables result in empty body returned from md2html:
+    <!--  BODY (show only if not empty) -->
+    {% set body = Entity.entityData.body %} {% if body != '' %} {% set body = Entity.entityData.body|md2html %}
+    <!-- Workaround for bug #532; long tables result in empty body returned from md2html:
           If body is empty, reload and don't parse as markdown -->
-      {% if body|trim == '' %}
-          {% set body = Entity.entityData.body %}
-      {% endif %}
-      <div id='body_view' class='txt'>{{ body|raw }}</div>
-  {% endif %}
-
-  {% include('steps-links-view.html') %}
-
-  {% if Entity.type == 'experiments' %}
-      <!-- eLabID -->
-      <p class='elabid'>{{ 'Unique eLabID:'|trans }} {{ Entity.entityData.elabid }}</p>
-  {% endif %}
-
-  {% if Entity.type == 'items' %}
-      <!-- SHOW USER -->
-      <p>{{ 'Last modified by'|trans }} {{ Entity.entityData.fullname|raw }}</p>
-  {% endif %}
+    {% if body|trim == '' %} {% set body = Entity.entityData.body %} {% endif %}
+    <div id='body_view' class='txt'>{{ body|raw }}</div>
+    {% endif %} {% include('steps-links-view.html') %} {% if Entity.type == 'experiments' %}
+    <!-- eLabID -->
+    <p class='elabid'>{{ 'Unique eLabID:'|trans }} {{ Entity.entityData.elabid }}</p>
+    {% endif %} {% if Entity.type == 'items' %}
+    <!-- SHOW USER -->
+    <p>{{ 'Last modified by'|trans }} {{ Entity.entityData.fullname|raw }}</p>
+    {% endif %}
 
 
 </section>
 
 
-{{ include('uploads.html') }}
-
-{% if App.Session.get('auth') %}
-    <section id='comment_container'>
-        <div id='comment' class='box'>
-            <i class='fas fa-comments mr-1 align-baseline'></i><h3 class='d-inline'>{{ 'Comments'|trans }}</h3>
-
-            {% if commentsArr %}
-                {% for comment in commentsArr %}
-                    <div class='box'>
-                        <div class='comment-header'>
-                        <span class='text-muted'>{{ comment.fullname|raw }} {{ 'commented'|trans }}</span>
-                        <span title='{{ comment.datetime }}' class='text-muted relative-moment'></span>
-                        {% if comment.userid == Entity.Users.userData.userid %}
-                        <i class='fas fa-trash-alt fa-lg fa-pull-right clickable commentsDestroy' data-id='{{ comment.id }}' data-expid='{{ Entity.id }}' data-confirm='{{ 'Delete this?'|trans }}' ></i>
-                        {% endif %}
-                        </div>
-                        <!-- .editable uses the id of the element to send to the controller -->
-                        <p class='comment m-2 p-2 {{ comment.userid == Entity.Users.userData.userid ? "editable" }}' data-itemid='{{ Entity.id }}' data-type='{{ Entity.type }}' id='comment_{{ comment.id }}' data-indicator='{{ 'Saving'|trans }}' data-submit='{{ 'Save'|trans }}' data-cancel='{{ 'Cancel'|trans }}'>{{ comment.comment|raw }}</p>
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-            <textarea id='commentsCreateArea' autocomplete='off' placeholder='{{ 'Add a comment'|trans }}' aria-label='Comment area'></textarea>
-            <div id='commentsCreateButtonDiv' class='submitButtonDiv'>
-                <button class='button btn btn-primary' id='commentsCreateButton' data-expid='{{ Entity.id }}'>{{ 'Save'|trans }}</button>
+{{ include('uploads.html') }} {% if App.Session.get('auth') %}
+<section id='signature_container'>
+    <div id='signature' class='box'>
+        <i class='fas fa-signature mr-1 align-baseline'></i>
+        <h3 class='d-inline'>{{ 'Signatures'|trans }}</h3>
+        {% if signaturesArr %} {% for signature in signaturesArr %}
+        <div class='box'>
+            <div class='signature-header'>
+                <span class='text-muted'>{{ 'Signed by'|trans }} <strong>{{ signature.fullname|raw }}</strong> {{ 'on'|trans }} {{ signature.datetime }}</span>
             </div>
         </div>
-    </section>
+        {% endfor %} {% endif %}
+        <div id='signaturesCreateButtonDiv' class='submitButtonDiv'>
+            <button class='button btn btn-primary' id='signaturesCreateButton' data-expid='{{ Entity.id }}'>{{ 'Sign'|trans }}</button>
+        </div>
+    </div>
+</section>
+
+<section id='comment_container'>
+    <div id='comment' class='box'>
+        <i class='fas fa-comments mr-1 align-baseline'></i>
+        <h3 class='d-inline'>{{ 'Comments'|trans }}</h3>
+
+        {% if commentsArr %} {% for comment in commentsArr %}
+        <div class='box'>
+            <div class='comment-header'>
+                <span class='text-muted'>{{ comment.fullname|raw }} {{ 'commented'|trans }}</span>
+                <span title='{{ comment.datetime }}' class='text-muted relative-moment'></span> {% if comment.userid == Entity.Users.userData.userid %}
+                <i class='fas fa-trash-alt fa-lg fa-pull-right clickable commentsDestroy' data-id='{{ comment.id }}' data-expid='{{ Entity.id }}' data-confirm='{{ ' Delete this? '|trans }}'></i> {% endif %}
+            </div>
+            <!-- .editable uses the id of the element to send to the controller -->
+            <p class='comment m-2 p-2 {{ comment.userid == Entity.Users.userData.userid ? "editable" }}' data-itemid='{{ Entity.id }}' data-type='{{ Entity.type }}' id='comment_{{ comment.id }}' data-indicator='{{ ' Saving '|trans }}' data-submit='{{ ' Save
+                '|trans }}' data-cancel='{{ ' Cancel '|trans }}'>{{ comment.comment|raw }}</p>
+        </div>
+        {% endfor %} {% endif %}
+
+        <textarea id='commentsCreateArea' autocomplete='off' placeholder='{{ ' Add a comment '|trans }}' aria-label='Comment area'></textarea>
+        <div id='commentsCreateButtonDiv' class='submitButtonDiv'>
+            <button class='button btn btn-primary' id='commentsCreateButton' data-expid='{{ Entity.id }}'>{{ 'Save'|trans }}</button>
+        </div>
+    </div>
+</section>
 
 {% endif %}
 
 <!-- REVISIONS -->
 {% if revNum > 0 %}
-    <span class='align_right'><i class='fas fa-history mr-1'></i>
+<span class='align_right'><i class='fas fa-history mr-1'></i>
         <a href='revisions.php?type={{ Entity.type }}&item_id={{ Entity.id }}'>{{ revNum }}
             {% trans %}revision available{% plural revNum %}revisions available{% endtrans %}</a>
-    </span>
-{% endif %}
+    </span> {% endif %}
 
-<div id='info'
-    data-type='{{ Entity.type }}'
-    data-id='{{ Entity.id }}'
-    data-locale='{{ App.Users.userData.lang }}'
-    data-confirm="{{ 'Delete this?'|trans }}">
+<div id='info' data-type='{{ Entity.type }}' data-id='{{ Entity.id }}' data-locale='{{ App.Users.userData.lang }}' data-confirm="{{ 'Delete this?'|trans }}">
 </div>
-<div id='shortcuts'
-    data-create='{{ Entity.Users.userData.sc_create }}'
-    data-edit='{{ Entity.Users.userData.sc_edit }}'>
+<div id='shortcuts' data-create='{{ Entity.Users.userData.sc_create }}' data-edit='{{ Entity.Users.userData.sc_edit }}'>
 </div>
 
 <script src='app/js/view.bundle.js?v={{ v }}'></script>

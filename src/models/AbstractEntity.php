@@ -31,6 +31,9 @@ abstract class AbstractEntity
     /** @var Comments $Comments instance of Comments */
     public $Comments;
 
+    /** @var Signatures $Signatures instance of Signatures */
+    public $Signatures;
+
     /** @var Links $Links instance of Links */
     public $Links;
 
@@ -107,6 +110,7 @@ abstract class AbstractEntity
         $this->Uploads = new Uploads($this);
         $this->Users = $users;
         $this->Comments = new Comments($this, new Email(new Config(), $this->Users));
+        $this->Signatures = new Signatures($this);
         $this->itemsReadNb = 0;
         $this->filters = array();
 
@@ -222,6 +226,8 @@ abstract class AbstractEntity
                 uploads.up_item_id, uploads.has_attachment,
                 experiments_comments.recent_comment,
                 (experiments_comments.recent_comment IS NOT NULL) AS has_comment,
+                experiments_signatures.recent_signature,
+                (experiments_signatures.recent_signature IS NOT NULL) AS has_signature,
                 SUBSTRING_INDEX(GROUP_CONCAT(stepst.next_step SEPARATOR '|'), '|', 1) AS next_step,
                 CONCAT(users.firstname, ' ', users.lastname) AS fullname";
 
@@ -244,6 +250,12 @@ abstract class AbstractEntity
                 ) AS experiments_comments
                 ON (experiments_comments.item_id = experiments.id)';
 
+            $signaturesJoin = 'LEFT JOIN (
+                SELECT MAX(experiments_signatures.datetime) AS recent_signature,
+                    experiments_signatures.item_id FROM experiments_signatures GROUP BY experiments_signatures.item_id
+                ) AS experiments_signatures
+                ON (experiments_signatures.item_id = experiments.id)';
+
             $sql = implode(' ', array(
                 $select,
                 $tagsSelect,
@@ -254,6 +266,7 @@ abstract class AbstractEntity
                 $statusJoin,
                 $uploadsJoin,
                 $commentsJoin,
+                $signaturesJoin,
             ));
         } elseif ($this instanceof Database) {
             $sql = "SELECT DISTINCT items.*, items_types.name AS category,
@@ -262,6 +275,8 @@ abstract class AbstractEntity
                 items_types.bookable,
                 items_comments.recent_comment,
                 (items_comments.recent_comment IS NOT NULL) AS has_comment,
+                items_signatures.recent_signature,
+                (items_signatures.recent_signature IS NOT NULL) AS has_signature,
                 SUBSTRING_INDEX(GROUP_CONCAT(stepst.next_step SEPARATOR '|'), '|', 1) AS next_step,
                 uploads.up_item_id, uploads.has_attachment,
                 CONCAT(users.firstname, ' ', users.lastname) AS fullname,
@@ -288,6 +303,12 @@ abstract class AbstractEntity
                 ) AS items_comments
                 ON (items_comments.item_id = items.id)';
 
+            $signaturesJoin = 'LEFT JOIN (
+                SELECT MAX(items_signatures.datetime) AS recent_signature,
+                    items_signatures.item_id FROM items_signatures GROUP BY items_signatures.item_id
+                ) AS items_signatures
+                ON (items_signatures.item_id = items.id';
+
             $sql .= ' ';
             $sql .= implode(' ', array(
                 $tagsSelect,
@@ -296,6 +317,7 @@ abstract class AbstractEntity
                 $stepsJoin,
                 $eventsJoin,
                 $commentsJoin,
+                $signaturesJoin,
                 $tagsJoin,
             ));
         } else {
