@@ -1069,6 +1069,15 @@ CREATE TABLE `experiments_signatures` (
   `userid` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
+-- Table structure for table `items_signatures`
+--
+CREATE TABLE `items_signatures` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `datetime` datetime NOT NULL,
+  `item_id` int(10) UNSIGNED NOT NULL,
+  `userid` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
 -- Indexes for table `users2teams`
 --
 ALTER TABLE `users2teams`
@@ -1086,9 +1095,21 @@ ALTER TABLE `experiments_signatures`
   ADD KEY `fk_experiments_signatures_experiments_id` (`item_id`),
   ADD KEY `fk_experiments_signatures_users_userid` (`userid`);
 --
+-- Indexes for table `items_signatures`
+--
+ALTER TABLE `items_signatures`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_items_signatures_items_id` (`item_id`),
+  ADD KEY `fk_items_signatures_users_userid` (`userid`);
+--
 -- AUTO_INCREMENT for table `experiments_signatures`
 --
 ALTER TABLE `experiments_signatures`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `items_signatures`
+--
+ALTER TABLE `items_signatures`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for table `experiments_signatures`
@@ -1096,6 +1117,13 @@ ALTER TABLE `experiments_signatures`
 ALTER TABLE `experiments_signatures`
   ADD CONSTRAINT `fk_experiments_signatures_experiments_id` FOREIGN KEY (`item_id`) REFERENCES `experiments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_experiments_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+--
+-- Constraints for table `items_signatures`
+--
+ALTER TABLE `items_signatures`
+  ADD CONSTRAINT `fk_items_signatures_experiments_id` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_items_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 --
