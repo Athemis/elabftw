@@ -31,5 +31,17 @@ START TRANSACTION;
     ALTER TABLE `experiments` CHANGE `datetime` `datetime` timestamp NULL;
     ALTER TABLE `items` ADD `lastchange` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
     ALTER TABLE `users` ADD `json_editor` tinyint(1) UNSIGNED NOT NULL DEFAULT '0';
+    CREATE TABLE `experiments_signatures` (
+      `id` int(10) UNSIGNED NOT NULL,
+      `datetime` datetime NOT NULL,
+      `item_id` int(10) UNSIGNED NOT NULL,
+      `userid` int(10) UNSIGNED NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ALTER TABLE `experiments_signatures` ADD PRIMARY KEY (`id`);
+    ALTER TABLE `experiments_signatures` ADD KEY `fk_experiments_signatures_experiments_id` (`item_id`);
+    ALTER TABLE `experiments_signatures` ADD KEY `fk_experiments_signatures_users_userid` (`userid`);
+    ALTER TABLE `experiments_signatures` MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+    ALTER TABLE `experiments_signatures` ADD CONSTRAINT `fk_experiments_signatures_experiments_id` FOREIGN KEY (`item_id`) REFERENCES `experiments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ALTER TABLE `experiments_signatures` ADD CONSTRAINT `fk_experiments_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
     UPDATE config SET conf_value = 52 WHERE conf_name = 'schema';
 COMMIT;
