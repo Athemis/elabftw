@@ -13,11 +13,13 @@ const Signatures = {
     (document.getElementById('signaturesCreateButton') as HTMLButtonElement).disabled = true;
     const type = $('#info').data('type');
     const id = $('#info').data('id');
+    const revnum = $('#info').data('revnum');
 
     $.post(this.controller, {
       create: true,
       type: type,
       id: id,
+      revnum: revnum,
     }).done(function(json) {
       notif(json);
       console.log(JSON.stringify(json));

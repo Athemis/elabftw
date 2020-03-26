@@ -49,8 +49,9 @@ try {
 
     // CREATE
     if ($Request->request->has('create')) {
+        $revnum = (int) $Request->request->get('revnum');
         $Entity->setId((int) $Request->request->get('id'));
-        $signatureId = $Entity->Signatures->create();
+        $signatureId = $Entity->Signatures->create($revnum);
         $Response->setData(array(
             'res' => true,
             'msg' => _('Signed'),

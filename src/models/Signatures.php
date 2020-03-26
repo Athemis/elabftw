@@ -43,13 +43,14 @@ class Signatures implements CrudInterface
      *
      * @return int signature id
      */
-    public function create(): int
+    public function create(int $revision_id): int
     {
-        $sql = 'INSERT INTO ' . $this->Entity->type . '_signatures(datetime, item_id, userid)
-            VALUES(:datetime, :item_id, :userid)';
+        $sql = 'INSERT INTO ' . $this->Entity->type . '_signatures(datetime, item_id, revision_id, userid)
+            VALUES(:datetime, :item_id, :revision_id, :userid)';
         $req = $this->Db->prepare($sql);
         $req->bindValue(':datetime', date('Y-m-d H:i:s'));
         $req->bindParam(':item_id', $this->Entity->id, PDO::PARAM_INT);
+        $req->bindParam(':revision_id', $revision_id, PDO::PARAM_INT);
         $req->bindParam(':userid', $this->Entity->Users->userData['userid'], PDO::PARAM_INT);
 
         $this->Db->execute($req);

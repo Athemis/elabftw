@@ -157,21 +157,25 @@
 
 
 {{ include('uploads.html') }} {% if App.Session.get('auth') %}
+<!-- SIGNATURES -->
 <section id='signature_container'>
     <div id='signature' class='box'>
         <i class='fas fa-signature mr-1 align-baseline'></i>
         <h3 class='d-inline'>{{ 'Signatures'|trans }}</h3>
-        {% if signaturesArr %} {% for signature in signaturesArr %}
-        <div class='box'>
-            <div class='signature-header'>
-                <span class='text-muted'>{{ 'Signed by'|trans }} <strong>{{ signature.fullname|raw }}</strong> {{ 'on'|trans }} {{ signature.datetime }}</span>
+        {% if signaturesArr %} {% for signature in signaturesArr %} {% if signature.revision_id == revNum %}
+        <div class='box signature-current-rev'>
+            {% else %}
+            <div class='box signature-old-rev'>
+                {% endif %}
+                <div class='signature-header'>
+                    <span class='text-muted'>{{ signature.datetime }} | <strong>{{ signature.fullname|raw }}</strong> {% if signature.revision_id == revNum %}{{ 'signed the current revision'|trans }}{% else %}{{ 'signed revision'|trans }} {{ signature.revision_id|raw }} ({{ 'current revision is'|trans}} {{ revNum }}){% endif %}.</span>
+                </div>
+            </div>
+            {% endfor %} {% endif %}
+            <div id='signaturesCreateButtonDiv' class='submitButtonDiv'>
+                <button class='button btn btn-primary' id='signaturesCreateButton' data-expid='{{ Entity.id }}'>{{ 'Sign and approve'|trans }}</button>
             </div>
         </div>
-        {% endfor %} {% endif %}
-        <div id='signaturesCreateButtonDiv' class='submitButtonDiv'>
-            <button class='button btn btn-primary' id='signaturesCreateButton' data-expid='{{ Entity.id }}'>{{ 'Sign and approve'|trans }}</button>
-        </div>
-    </div>
 </section>
 
 <section id='comment_container'>
@@ -208,7 +212,7 @@
             {% trans %}revision available{% plural revNum %}revisions available{% endtrans %}</a>
     </span> {% endif %}
 
-<div id='info' data-type='{{ Entity.type }}' data-id='{{ Entity.id }}' data-locale='{{ App.Users.userData.lang }}' data-confirm="{{ 'Delete this?'|trans }}">
+<div id='info' data-type='{{ Entity.type }}' data-id='{{ Entity.id }}' data-revnum='{{ revNum }}' data-locale='{{ App.Users.userData.lang }}' data-confirm="{{ 'Delete this?'|trans }}">
 </div>
 <div id='shortcuts' data-create='{{ Entity.Users.userData.sc_create }}' data-edit='{{ Entity.Users.userData.sc_edit }}'>
 </div>
