@@ -307,7 +307,7 @@ abstract class AbstractEntity
                 SELECT MAX(items_signatures.datetime) AS recent_signature,
                     items_signatures.item_id FROM items_signatures GROUP BY items_signatures.item_id
                 ) AS items_signatures
-                ON (items_signatures.item_id = items.id';
+                ON (items_signatures.item_id = items.id)';
 
             $sql .= ' ';
             $sql .= implode(' ', array(
