@@ -31,7 +31,7 @@
     ALTER TABLE `items_signatures` ADD KEY `fk_items_signatures_users_userid` (`userid`);
     ALTER TABLE `items_signatures` MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
     ALTER TABLE `items_signatures` ADD CONSTRAINT `fk_items_signatures_items_id` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-    ALTER TABLE `items_signatures` ADD CONSTRAINT `fk_experiments_signatures_revisions_id` FOREIGN KEY (`revision_id`) REFERENCES `items_revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ALTER TABLE `items_signatures` ADD CONSTRAINT `fk_items_signatures_revisions_id` FOREIGN KEY (`revision_id`) REFERENCES `items_revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
     ALTER TABLE `items_signatures` ADD CONSTRAINT `fk_items_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
     UPDATE config SET conf_value = 53 WHERE conf_name = 'schema';
 COMMIT;
