@@ -1065,8 +1065,12 @@ CREATE TABLE `users2teams` (
 CREATE TABLE `experiments_signatures` (
   `id` int(10) UNSIGNED NOT NULL,
   `datetime` datetime NOT NULL,
+  `revoked` tinyint(1) DEFAULT '0',
+  `datetime_revoked` datetime DEFAULT NULL,
   `item_id` int(10) UNSIGNED NOT NULL,
+  `revision_id` int(10) UNSIGNED NOT NULL,
   `userid` int(10) UNSIGNED NOT NULL
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Table structure for table `items_signatures`
@@ -1074,7 +1078,10 @@ CREATE TABLE `experiments_signatures` (
 CREATE TABLE `items_signatures` (
   `id` int(10) UNSIGNED NOT NULL,
   `datetime` datetime NOT NULL,
+  `revoked` tinyint(1) DEFAULT '0',
+  `datetime_revoked` datetime DEFAULT NULL,
   `item_id` int(10) UNSIGNED NOT NULL,
+  `revision_id` int(10) UNSIGNED NOT NULL,
   `userid` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
@@ -1093,6 +1100,7 @@ COMMIT;
 ALTER TABLE `experiments_signatures`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_experiments_signatures_experiments_id` (`item_id`),
+  ADD KEY `fk_experiments_signatures_revisions_id` (`revision_id`),
   ADD KEY `fk_experiments_signatures_users_userid` (`userid`);
 --
 -- Indexes for table `items_signatures`
@@ -1100,6 +1108,7 @@ ALTER TABLE `experiments_signatures`
 ALTER TABLE `items_signatures`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_items_signatures_items_id` (`item_id`),
+  ADD KEY `fk_items_signatures_revisions_id` (`revision_id`),
   ADD KEY `fk_items_signatures_users_userid` (`userid`);
 --
 -- AUTO_INCREMENT for table `experiments_signatures`
@@ -1116,6 +1125,7 @@ ALTER TABLE `items_signatures`
 --
 ALTER TABLE `experiments_signatures`
   ADD CONSTRAINT `fk_experiments_signatures_experiments_id` FOREIGN KEY (`item_id`) REFERENCES `experiments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_experiments_signatures_revisions_id` FOREIGN KEY (`revision_id`) REFERENCES `experiments_revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_experiments_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 --
@@ -1123,6 +1133,7 @@ COMMIT;
 --
 ALTER TABLE `items_signatures`
   ADD CONSTRAINT `fk_items_signatures_experiments_id` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_experiments_signatures_revisions_id` FOREIGN KEY (`revision_id`) REFERENCES `items_revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_items_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
