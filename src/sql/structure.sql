@@ -1132,7 +1132,7 @@ COMMIT;
 -- Constraints for table `items_signatures`
 --
 ALTER TABLE `items_signatures`
-  ADD CONSTRAINT `fk_items_signatures_experiments_id` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_items_signatures_items_id` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_items_signatures_revisions_id` FOREIGN KEY (`revision_id`) REFERENCES `items_revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_items_signatures_users_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
