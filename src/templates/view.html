@@ -168,7 +168,7 @@
             <div class='box signature-old-rev'>
                 {% endif %}
                 <div class='signature-header'>
-                    <span class='text-muted'>{{ signature.datetime }} | <strong>{{ signature.fullname|raw }}</strong> {% if signature.revision_id == revNum %}{{ 'signed the current revision'|trans }}{% else %}{{ 'signed revision'|trans }} {{ signature.revision_id|raw }} ({{ 'current revision is'|trans}} {{ revNum }}){% endif %}.</span>
+                    <span class='text-muted'>{{ signature.datetime }} | <strong>{{ signature.fullname|raw }}</strong> {% if signature.revision_id == revNum %}{{ 'signed and approved the current revision'|trans }}{% else %}{{ 'signed and approved revision'|trans }} {{ signature.revision_id|raw }} ({{ 'current revision is'|trans}} {{ revNum }}){% endif %}.</span>
                 </div>
             </div>
             {% endfor %} {% endif %}
