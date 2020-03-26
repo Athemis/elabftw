@@ -101,17 +101,13 @@ class Signatures implements CrudInterface
     }
 
     /**
-     * Destroy a signature
+     * Not implemented
      *
-     * @param int $id id of the signature
+     * @param int $id
      * @return void
      */
     public function destroy(int $id): void
     {
-        $sql = 'DELETE FROM ' . $this->Entity->type . '_signatures WHERE id = :id AND userid = :userid';
-        $req = $this->Db->prepare($sql);
-        $req->bindParam(':id', $id, PDO::PARAM_INT);
-        $req->bindParam(':userid', $this->Entity->Users->userData['userid'], PDO::PARAM_INT);
-        $this->Db->execute($req);
+        return;
     }
 }
