@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Elabftw\Models;
 
+use function array_diff;
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
 use Elabftw\Elabftw\Db;
@@ -133,6 +134,11 @@ class Teams implements CrudInterface
      */
     public function rmUserFromTeams(int $userid, array $teamIdArr): void
     {
+        // make sure that the user is in more than one team before removing the team
+        $UsersHelper = new UsersHelper();
+        if (count($UsersHelper->getTeamsFromUserid($userid)) === 1) {
+            throw new ImproperActionException('Cannot remove team from user in only one team!');
+        }
         foreach ($teamIdArr as $teamId) {
             $sql = 'DELETE FROM users2teams WHERE `users_id` = :userid AND `teams_id` = :team';
             $req = $this->Db->prepare($sql);
@@ -159,8 +165,8 @@ class Teams implements CrudInterface
         $UsersHelper = new UsersHelper();
         $currentTeams = $UsersHelper->getTeamsIdFromUserid($userid);
 
-        $addToTeams = \array_diff($teamIdArr, $currentTeams);
-        $rmFromTeams =\array_diff($currentTeams, $teamIdArr);
+        $addToTeams = array_diff($teamIdArr, $currentTeams);
+        $rmFromTeams = array_diff($currentTeams, $teamIdArr);
 
         $this->rmUserFromTeams($userid, $rmFromTeams);
         $this->addUserToTeams($userid, $addToTeams);
@@ -414,16 +420,11 @@ class Teams implements CrudInterface
         return $req->fetch(PDO::FETCH_NAMED);
     }
 
-    // Check if two users have at least one team in common
-    public function hasCommonTeam(int $useridA, int $useridB): bool
+    public function hasCommonTeamWithCurrent(int $userid, int $team): bool
     {
         $UsersHelper = new UsersHelper();
-        $teamsA = $UsersHelper->getTeamsIdFromUserid($useridA);
-        $teamsB = $UsersHelper->getTeamsIdFromUserid($useridB);
-        if (\count(\array_intersect($teamsA, $teamsB)) > 0) {
-            return true;
-        }
-        return false;
+        $teams = $UsersHelper->getTeamsIdFromUserid($userid);
+        return in_array((string) $team, $teams, true);
     }
 
     public function isUserInTeam(int $userid, int $team): bool
